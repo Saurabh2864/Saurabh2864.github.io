@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saurabh Mirajkar · QA Engineer Portfolio</title>
+<meta name="description" content="Saurabh Mirajkar, QA Engineer: Playwright + Python automation with CI/CD for a NABL/ISO laboratory system, shipped mobile and game products, and client delivery.">
+<meta name="author" content="Saurabh Mirajkar">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Saurabh Mirajkar · QA Engineer Portfolio">
+<meta property="og:description" content="Saurabh Mirajkar, QA Engineer: Playwright + Python automation with CI/CD for a NABL/ISO laboratory system, shipped mobile and game products, and client delivery.">
+<meta property="og:url" content="https://saurabh2864.github.io/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111a26'/%3E%3Ctext x='32' y='41' font-family='monospace' font-size='24' font-weight='700' fill='%23e9eef4' text-anchor='middle'%3ESM%3C/text%3E%3Ccircle cx='54' cy='54' r='7' fill='%2311805a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Concept: the portfolio is a QA "case file" binder. Lab-paper body with ruled grid, every project is a numbered case file
+   with an ID, status and spec header; one dark "run console" panel per key moment (hero index, CI flow, contact). */
+:root {
+  --bg: #eff2ee;
+  --paper: #ffffff;
+  --ink: #111a26;
+  --muted: #586273;
+  --line: #d7dcd4;
+  --rule: #e3e7e0;
+  --accent: #d9521c;
+  --accent-ink: #b0400e;
+  --accent-soft: #fbe8de;
+  --pass: #11805a;
+  --pass-soft: #e1f2e9;
+  --info: #2a5bc7;
+  --chip: #edf0ea;
+  --panel: #111a26;
+  --panel-2: #1a2535;
+  --panel-ink: #e9eef4;
+  --panel-dim: #93a0b3;
+  --panel-line: #29364a;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --r: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1218; --paper: #141b24; --ink: #e8ecf1; --muted: #9ba5b4; --line: #26303d; --rule: #1a222c;
+    --accent: #ff7a3d; --accent-ink: #ff9a68; --accent-soft: #2b1a10; --pass: #46c08b; --pass-soft: #12261c;
+    --info: #86a8ff; --chip: #1c2530; --panel: #090d12; --panel-2: #121a25; --panel-line: #253042;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1218; --paper: #141b24; --ink: #e8ecf1; --muted: #9ba5b4; --line: #26303d; --rule: #1a222c;
+  --accent: #ff7a3d; --accent-ink: #ff9a68; --accent-soft: #2b1a10; --pass: #46c08b; --pass-soft: #12261c;
+  --info: #86a8ff; --chip: #1c2530; --panel: #090d12; --panel-2: #121a25; --panel-line: #253042;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body {
+  margin: 0; background-color: var(--bg); color: var(--ink);
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 32px 32px;
+  font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+}
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: 20px; }
+a { color: var(--info); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.12; margin: 0; text-wrap: balance; }
+p, ul, ol { margin: 0; }
+.mono { font-family: var(--font-mono); }
+.label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); }
+.muted { color: var(--muted); }
+
+/* ---------- Top bar ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding-block: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--ink); text-decoration: none; }
+.brand .mark { width: 32px; height: 32px; border-radius: 8px; background: var(--panel); color: var(--panel-ink); display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; font-weight: 600; position: relative; }
+.brand .mark::after { content: ""; position: absolute; right: -3px; bottom: -3px; width: 10px; height: 10px; border-radius: 50%; background: var(--pass); border: 2px solid var(--bg); }
+.nav { display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px; }
+.nav a { color: var(--muted); text-decoration: none; }
+.nav a:hover { color: var(--ink); }
+
+/* ---------- Buttons / chips ---------- */
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 500 14px var(--font-body); padding: 11px 18px; border-radius: 9px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); text-decoration: none; cursor: pointer; transition: transform .15s, border-color .15s; }
+.btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+:root[data-theme="dark"] .btn.primary { color: #1a0b03; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #1a0b03; } }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 4px 9px; border-radius: 6px; background: var(--chip); color: var(--ink); white-space: nowrap; }
+.chip.t { background: transparent; border: 1px solid var(--line); font-size: 11.5px; padding: 2px 8px; }
+dd .chips { gap: 5px; }
+.status { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status.active { color: var(--accent-ink); background: var(--accent-soft); }
+.status.done { color: var(--pass); background: var(--pass-soft); }
+.status.public { color: var(--info); background: color-mix(in srgb, var(--info) 13%, transparent); }
+
+/* ---------- Hero ---------- */
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding-block: 64px 40px; }
+.hero > * { min-width: 0; }
+.hero h1 { font-size: clamp(42px, 6.4vw, 76px); font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; }
+.hero h1 span { color: var(--accent); }
+.thesis { font-family: var(--font-display); font-weight: 500; font-size: clamp(21px, 2.4vw, 27px); line-height: 1.28; margin-top: 18px; max-width: 28ch; }
+.hero .intro { color: var(--muted); margin-top: 16px; max-width: 56ch; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+
+.console { background: var(--panel); color: var(--panel-ink); border-radius: 14px; border: 1px solid var(--panel-line); box-shadow: 0 30px 60px -32px rgba(10, 18, 30, .55); overflow: hidden; }
+.console-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--panel-line); font-family: var(--font-mono); font-size: 12px; color: var(--panel-dim); }
+.console-bar .dots { display: flex; gap: 6px; }
+.console-bar .dots i { width: 10px; height: 10px; border-radius: 50%; background: #2c3747; display: block; }
+.idx { display: grid; }
+.idx a { display: grid; grid-template-columns: 38px 1fr auto; gap: 12px; align-items: center; padding: 13px 16px; color: var(--panel-ink); text-decoration: none; border-bottom: 1px solid var(--panel-line); transition: background .15s; }
+.idx a:hover { background: var(--panel-2); }
+.idx a > * { min-width: 0; }
+.idx .n { font-family: var(--font-mono); font-size: 12px; color: var(--panel-dim); }
+.idx .t { font-weight: 600; font-size: 15px; }
+.idx .t small { display: block; font-weight: 400; font-size: 12.5px; color: var(--panel-dim); font-family: var(--font-mono); }
+.idx .s { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.idx .s.a { color: #ff9a68; } .idx .s.d { color: #46c08b; } .idx .s.p { color: #86a8ff; }
+.console-foot { padding: 12px 16px; font-family: var(--font-mono); font-size: 12px; color: var(--panel-dim); }
+.console-foot b { color: #46c08b; font-weight: 600; }
+
+/* At a glance */
+.glance { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); }
+.glance > div { padding: 18px 20px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.glance > div + div { border-left: 1px solid var(--line); }
+.glance .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.glance .v { font-weight: 600; font-size: 15px; line-height: 1.4; }
+.glance .v.big { font-family: var(--font-display); font-weight: 800; font-size: 30px; line-height: 1.05; }
+
+/* ---------- Sections ---------- */
+section { padding-block: 72px; }
+.sec-head { display: grid; gap: 10px; margin-bottom: 30px; max-width: 760px; }
+.sec-head h2 { font-size: clamp(30px, 3.8vw, 44px); font-weight: 800; letter-spacing: -0.015em; }
+.sec-head p { color: var(--muted); font-size: 17px; }
+
+.paper { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); }
+
+/* Case file */
+.case { margin-top: 26px; }
+.case-tab { display: inline-flex; align-items: center; gap: 10px; background: var(--panel); color: var(--panel-ink); font-family: var(--font-mono); font-size: 12px; padding: 7px 14px; border-radius: 10px 10px 0 0; letter-spacing: .04em; }
+.case-tab b { color: #ff9a68; font-weight: 600; }
+.case-body { background: var(--paper); border: 1px solid var(--line); border-radius: 0 var(--r) var(--r) var(--r); padding: 28px; display: grid; gap: 26px; }
+.case-top { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.case-top h3 { font-size: clamp(24px, 2.8vw, 32px); font-weight: 800; letter-spacing: -0.01em; }
+.case-top .lede { color: var(--muted); font-size: 16.5px; margin-top: 10px; }
+.spec { display: grid; grid-template-columns: auto 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 14px; }
+.spec dt, .spec dd { margin: 0; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.spec dt { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: color-mix(in srgb, var(--chip) 60%, transparent); }
+.spec dd { min-width: 0; }
+.spec dt:nth-last-of-type(1), .spec dd:last-of-type { border-bottom: 0; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.grid-2 > *, .grid-3 > * { min-width: 0; }
+.block { border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 10px; align-content: start; }
+.block h4 { font-size: 17px; font-weight: 700; }
+.block .sub { color: var(--muted); font-size: 14px; }
+.block ul { padding-left: 18px; display: grid; gap: 6px; font-size: 15px; }
+.kv { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* Problem / approach / result strip */
+.par { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.par > div { padding: 18px 20px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.par > div + div { border-left: 1px solid var(--line); }
+.par p { font-size: 15px; }
+
+/* Bars */
+.bars { display: grid; gap: 11px; }
+.bar-row { display: grid; grid-template-columns: 140px 1fr 40px; gap: 12px; align-items: center; font-size: 14px; }
+.bar-row .what { min-width: 0; }
+.bar-row .what small { display: block; color: var(--muted); font-size: 12px; line-height: 1.3; }
+.track { height: 12px; border-radius: 99px; background: var(--chip); overflow: hidden; }
+.fill { display: block; height: 100%; border-radius: 99px; background: var(--accent); }
+.fill.ink { background: var(--panel-2); }
+:root[data-theme="dark"] .fill.ink { background: var(--info); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fill.ink { background: var(--info); } }
+.fill.mute { background: color-mix(in srgb, var(--muted) 45%, transparent); }
+.bar-row .n { font-family: var(--font-mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+.split { display: grid; grid-template-columns: 39fr 20fr 71fr; border-radius: 9px; overflow: hidden; }
+.split div { padding: 12px; display: grid; gap: 2px; min-width: 0; }
+.split b { font-family: var(--font-display); font-size: 24px; line-height: 1; }
+.split span { font-size: 12px; }
+.split .s1 { background: var(--accent); color: #fff; }
+.split .s2 { background: color-mix(in srgb, var(--accent) 35%, var(--paper)); color: var(--ink); }
+.split .s3 { background: var(--panel); color: var(--panel-ink); }
+
+/* Architecture */
+.arch { display: grid; grid-template-columns: minmax(0, .9fr) 26px minmax(0, 1.3fr) 26px minmax(0, .9fr); align-items: stretch; }
+.arch .col { display: grid; gap: 8px; align-content: start; }
+.arch .col .kv { margin-bottom: 2px; }
+.arch .box { border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px; font-size: 13.5px; background: var(--bg); }
+.arch .box small, .arch .layer small { display: block; font-size: 11.5px; color: var(--muted); }
+.arch .layer { border-radius: 9px; padding: 12px 14px; font-weight: 600; font-size: 14px; }
+.arch .layer small { font-weight: 400; color: inherit; opacity: .8; }
+.arch .l1 { background: var(--accent); color: #fff; }
+.arch .l2, .arch .l3 { background: var(--panel); color: var(--panel-ink); }
+.arch .l4 { border: 1.5px solid var(--ink); background: var(--paper); }
+.arch .ev .box { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 30%, var(--line)); }
+.arch .arrow { display: grid; place-items: center; color: var(--accent); font-weight: 700; }
+
+.pipeline { background: var(--panel); border-radius: 12px; padding: 18px; color: var(--panel-ink); display: grid; gap: 14px; }
+.pipeline .head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; color: var(--panel-dim); }
+.flow { display: flex; gap: 8px; flex-wrap: wrap; }
+.flow .st { flex: 1 1 140px; border: 1px solid var(--panel-line); border-radius: 9px; padding: 11px 12px; font-weight: 600; font-size: 13.5px; display: grid; gap: 2px; background: var(--panel-2); }
+.flow .st small { font-weight: 400; font-size: 12px; color: var(--panel-dim); }
+.flow .st.hot { background: #d9521c; border-color: #d9521c; color: #fff; }
+.flow .st.hot small { color: #ffe3d4; }
+
+.controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; }
+.controls div { display: grid; gap: 2px; font-size: 14.5px; min-width: 0; }
+.controls span { color: var(--muted); }
+
+.results { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.results > div { padding: 16px 18px; display: grid; gap: 4px; min-width: 0; }
+.results > div + div { border-left: 1px solid var(--line); }
+.results b { font-family: var(--font-display); font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.results b.hl { color: var(--accent-ink); }
+.results span { font-size: 13.5px; color: var(--muted); }
+
+.roadmap { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; position: relative; }
+.roadmap::before { content: ""; position: absolute; left: 10%; right: 10%; top: 13px; height: 2px; background: var(--line); }
+.roadmap > div { display: grid; justify-items: center; text-align: center; gap: 6px; position: relative; padding-inline: 6px; min-width: 0; }
+.roadmap i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-family: var(--font-mono); font-size: 12px; font-weight: 600; background: var(--paper); border: 2px solid var(--line); color: var(--muted); }
+.roadmap .done i { background: var(--pass); border-color: var(--pass); color: #fff; }
+.roadmap .now i { background: var(--accent); border-color: var(--accent); color: #fff; }
+.roadmap b { font-size: 13px; }
+.roadmap span { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+
+.ip-note { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 16px; }
+.ip-note b { color: var(--ink); }
+
+/* Code */
+.code { background: var(--panel); color: #d6deea; border-radius: 10px; padding: 16px 18px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; overflow-x: auto; white-space: pre; margin: 0; }
+.code .c { color: #6f7d92; } .code .k { color: #ff9a68; } .code .s { color: #8fd4a8; } .code .f { color: #86a8ff; }
+.tree { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; overflow-x: auto; white-space: pre; margin: 0; }
+.tree b { color: var(--ink); font-weight: 600; }
+.tests { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 14px; }
+.tests div { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--line); align-items: center; }
+.tests div:last-child { border-bottom: 0; }
+.tests code { font-family: var(--font-mono); font-size: 12.5px; overflow-wrap: anywhere; }
+.tests span { font-size: 12.5px; color: var(--muted); text-align: right; }
+
+/* Product case cards */
+.prod { display: grid; gap: 14px; align-content: start; }
+.prod .head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.prod .cid { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.prod h3 { font-size: 22px; font-weight: 800; }
+.prod .lede { font-size: 15px; color: var(--muted); }
+.prod .meta { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 13.5px; }
+.prod .meta dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+.prod .meta dd { margin: 0; min-width: 0; }
+.prod ul { padding-left: 18px; display: grid; gap: 5px; font-size: 14.5px; }
+.prod .chips { margin-top: auto; }
+.prod.paper { padding: 22px; }
+
+/* Delivery */
+.deliv { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; }
+.steps { display: grid; gap: 12px; }
+.step { display: grid; grid-template-columns: 96px 1fr; gap: 12px; }
+.step .kv { padding-top: 3px; }
+.step p { font-size: 15px; }
+
+/* Approach */
+.approach { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; }
+.approach > div { padding: 22px 18px; display: grid; gap: 8px; align-content: start; border: 1px solid var(--line); background: var(--paper); margin-left: -1px; min-width: 0; }
+.approach > div:first-child { border-radius: var(--r) 0 0 var(--r); margin-left: 0; }
+.approach > div:last-child { border-radius: 0 var(--r) var(--r) 0; }
+.approach .no { font-family: var(--font-mono); font-size: 12px; color: var(--accent-ink); font-weight: 600; }
+.approach h4 { font-size: 17px; }
+.approach p { font-size: 14px; color: var(--muted); }
+.approach .ev { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink); background: var(--chip); padding: 4px 8px; border-radius: 6px; justify-self: start; }
+
+/* Timeline */
+.timeline { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 26px; }
+.job { display: grid; grid-template-columns: 180px 1fr; gap: 28px; padding-block: 22px; border-bottom: 1px solid var(--line); }
+.job:last-child { border-bottom: 0; }
+.job > * { min-width: 0; }
+.job .when { font-family: var(--font-mono); font-size: 13px; color: var(--muted); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.job h3 { font-size: 19px; }
+.job .org { color: var(--muted); font-size: 15px; margin-top: 2px; }
+.job ul { padding-left: 18px; display: grid; gap: 4px; font-size: 15px; margin-top: 10px; }
+.now-pill { display: inline-block; font-family: var(--font-mono); font-size: 11px; color: var(--pass); border: 1px solid var(--pass); border-radius: 99px; padding: 0 8px; margin-left: 8px; vertical-align: 4px; }
+
+/* Skills */
+.skills { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.skills .paper { padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.skills h3 { font-size: 17px; }
+.skills p { font-size: 13.5px; color: var(--muted); }
+
+/* Creds */
+.creds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; padding: 8px 24px; }
+.cred { display: flex; justify-content: space-between; gap: 12px; padding-block: 13px; border-bottom: 1px dashed var(--line); font-size: 15px; }
+.cred > span:first-child { min-width: 0; }
+.cred .d { font-family: var(--font-mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+.cred .d.wip { color: var(--accent-ink); }
+
+/* Contact */
+.contact { background: var(--panel); color: var(--panel-ink); border-radius: 18px; padding: 44px; display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; }
+.contact > * { min-width: 0; }
+.contact h2 { font-size: clamp(32px, 4.4vw, 50px); font-weight: 800; letter-spacing: -0.015em; }
+.contact p { color: var(--panel-dim); margin-top: 10px; max-width: 52ch; }
+.contact .label { color: #ff9a68; }
+.email { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 20px; }
+.email code { font-family: var(--font-mono); font-size: 15px; background: #05080c; color: #eef2f8; border: 1px solid var(--panel-line); padding: 10px 14px; border-radius: 9px; user-select: all; overflow-wrap: anywhere; }
+.contact .btn.ghost { background: transparent; color: var(--panel-ink); border-color: var(--panel-line); }
+.contact .btn.primary { background: #d9521c; border-color: #d9521c; color: #fff; }
+.copied { font-size: 13px; color: #46c08b; min-height: 1.2em; }
+footer { padding-block: 26px 40px; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+/* Domains */
+.domains { padding: 20px 22px; display: grid; gap: 12px; margin-bottom: 18px; }
+.dom-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.dom { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 10px; padding: 7px 12px 7px 7px; font-size: 14.5px; font-weight: 500; background: var(--bg); }
+.dom i { font-style: normal; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: .06em; background: var(--panel); color: var(--panel-ink); border-radius: 6px; padding: 3px 6px; }
+
+/* Contact reach rows */
+.reach { display: grid; gap: 10px; margin-top: 20px; }
+.reach .email { margin-top: 0; }
+.rk { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--panel-dim); width: 52px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+  .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 44px 32px; }
+  .glance { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .glance > div + div { border-left: 0; }
+  .glance > div { border-top: 1px solid var(--line); }
+  .glance > div:nth-child(1), .glance > div:nth-child(2) { border-top: 0; }
+  .glance > div:nth-child(even) { border-left: 1px solid var(--line); }
+  .glance > div:last-child { grid-column: 1 / -1; border-left: 0; }
+  .case-top, .deliv { grid-template-columns: 1fr; }
+  .arch { grid-template-columns: 1fr; gap: 10px; }
+  .arch .arrow { transform: rotate(90deg); height: 18px; }
+  .grid-3, .skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .approach { grid-template-columns: 1fr; gap: 10px; }
+  .approach > div, .approach > div:first-child, .approach > div:last-child { border-radius: var(--r); margin-left: 0; }
+  .results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .results > div:nth-child(3) { border-left: 0; }
+  .results > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 720px) {
+  section { padding-block: 52px; }
+  .case-body { padding: 18px; }
+  .grid-2, .grid-3, .skills, .par, .controls, .creds { grid-template-columns: 1fr; }
+  .par > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .bar-row { grid-template-columns: 104px 1fr 36px; }
+  .roadmap { grid-template-columns: 1fr; gap: 12px; }
+  .roadmap::before { display: none; }
+  .roadmap > div { grid-template-columns: 28px 1fr; justify-items: start; text-align: left; column-gap: 12px; }
+  .roadmap > div span { grid-column: 2; }
+  .roadmap > div b { grid-column: 2; grid-row: 1; align-self: center; }
+  .roadmap > div i { grid-row: 1 / span 2; }
+  .job { grid-template-columns: 1fr; gap: 6px; }
+  .timeline { padding: 4px 18px; }
+  .step { grid-template-columns: 1fr; gap: 2px; }
+  .contact { grid-template-columns: 1fr; padding: 28px 22px; }
+  .rk { width: 100%; }
+  .creds { padding: 4px 18px; }
+  .nav { gap: 14px; font-size: 13px; flex-wrap: nowrap; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+  .nav a { white-space: nowrap; }
+}
+@media (max-width: 460px) {
+  .glance { grid-template-columns: 1fr; }
+  .glance > div:nth-child(even) { border-left: 0; }
+  .glance > div:nth-child(2) { border-top: 1px solid var(--line); }
+  .results { grid-template-columns: 1fr 1fr; }
+}
+</style>
+<style>:root{color-scheme:light}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark}} img{max-width:100%}</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">SM</span>Saurabh Mirajkar</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#cases">Case files</a>
+      <a href="#delivery">Delivery</a>
+      <a href="#approach">Approach</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <!-- ================= HERO ================= -->
+    <div class="hero">
+      <div>
+        <p class="label">QA Engineer · Test Automation · Client Delivery</p>
+        <h1>Saurabh Mirajkar<span>.</span></h1>
+        <p class="thesis">I find what breaks before users do, then build the automation that keeps it fixed.</p>
+        <p class="intro">3+ years testing web, mobile, game and enterprise products, from a ride-booking app to an accredited laboratory system. Today I design Playwright + Python frameworks with CI/CD at Deepak Cybit and act as the client's point of contact on an HSE compliance portal. Preparing for CAPM and growing toward AI project management.</p>
+        <div class="actions">
+          <a class="btn primary" href="#cases">Open the case files</a>
+          <a class="btn" href="https://www.linkedin.com/in/saurabh-mirajkar-52782a222" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://github.com/Saurabh2864" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+
+      <div class="console" aria-label="Index of case files">
+        <div class="console-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>case-index · 6 files</span></div>
+        <nav class="idx">
+          <a href="#case-01"><span class="n">01</span><span class="t">LIMS V1 test automation<small>web · playwright · ci/cd</small></span><span class="s a">● ACTIVE</span></a>
+          <a href="#case-02"><span class="n">02</span><span class="t">OpenCart automation framework<small>web · open source</small></span><span class="s p">● PUBLIC</span></a>
+          <a href="#case-03"><span class="n">03</span><span class="t">Symbol Drive app &amp; admin<small>android · ios · web admin</small></span><span class="s d">✓ SHIPPED</span></a>
+          <a href="#case-04"><span class="n">04</span><span class="t">All Ag All Day<small>mobile app · web admin</small></span><span class="s d">✓ SHIPPED</span></a>
+          <a href="#case-05"><span class="n">05</span><span class="t">Whiskey Simulation Game<small>android · ios · game</small></span><span class="s d">✓ SHIPPED</span></a>
+          <a href="#case-06"><span class="n">06</span><span class="t">Meeting Management System<small>web · government PSU</small></span><span class="s a">● ACTIVE</span></a>
+        </nav>
+        <div class="console-foot">domain knowledge → laboratory · gaming · e-commerce · <b>health, safety &amp; environment</b> · agriculture · IoT · banking · education</div>
+      </div>
+    </div>
+
+    <!-- ================= AT A GLANCE ================= -->
+    <div class="glance" aria-label="At a glance">
+      <div><span class="k">Experience</span><span class="v big">3+ yrs</span><span class="muted" style="font-size:13px">QA since 2022</span></div>
+      <div><span class="k">Current role</span><span class="v">Quality Analyst, Deepak Cybit</span><span class="muted" style="font-size:13px">Vadodara · On-site</span></div>
+      <div><span class="k">Core strength</span><span class="v">Playwright + Python automation with CI/CD</span></div>
+      <div><span class="k">Also own</span><span class="v">Client requirements &amp; project coordination</span></div>
+      <div><span class="k">Looking for</span><span class="v">QA Automation and project management roles</span></div>
+    </div>
+  </div>
+
+  <!-- ================= CASE FILES ================= -->
+  <section id="cases">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">Case files</span>
+        <h2>Six products, one standard: prove it works.</h2>
+        <p>Each case covers the product, my role, what I tested or built, and the outcome. Client and company details are shared only where they are already public.</p>
+      </div>
+
+      <!-- CASE 01 -->
+      <article class="case" id="case-01">
+        <div class="case-tab"><b>CASE 01</b> LIMS-V1 · Test automation programme</div>
+        <div class="case-body">
+          <div class="case-top">
+            <div>
+              <span class="status active">Active · Deepak Cybit</span>
+              <h3 style="margin-top:12px">End-to-end automation for an accredited laboratory system</h3>
+              <p class="lede">Sampleify LIMS is a NABL &amp; ISO compliant Laboratory Information Management System. Its data ends up on certificates of analysis for accredited labs, so input rules have to hold. I wrote the module-wise test-case workbook, then designed and built the Playwright + Python framework that runs it across browsers, in Docker and in CI, and reported the results to company leadership.</p>
+            </div>
+            <dl class="spec">
+              <dt>Role</dt><dd>Framework design, test design, execution, reporting</dd>
+              <dt>Platform</dt><dd>Web · Chromium, Firefox, WebKit</dd>
+              <dt>Scale today</dt><dd>205 automated tests in 15 modules (172 active, 33 skipped by design), built on 18 page objects</dd>
+              <dt>Period</dt><dd>2025 – present</dd>
+              <dt>Tools</dt><dd><span class="chips"><span class="chip t">VS Code</span><span class="chip t">Playwright</span><span class="chip t">pytest</span><span class="chip t">Allure</span><span class="chip t">Docker</span><span class="chip t">Jenkins</span><span class="chip t">GitHub Actions</span><span class="chip t">Git</span><span class="chip t">GitHub</span></span></dd>
+            </dl>
+          </div>
+
+          <div class="par">
+            <div><span class="kv">Challenge</span><p>Regression across Login, User Profile and 10 Organization Settings areas was manual, slow to repeat on two browsers, and hard to trace back to requirements.</p></div>
+            <div><span class="kv">Approach</span><p>Every workbook case became a test with the same ID. Page Object Model, data-driven inputs and one CI image that runs the same way locally, in Jenkins and in GitHub Actions.</p></div>
+            <div><span class="kv">Result</span><p>A full cross-browser cycle now runs unattended in about 3 hours, with screenshot, video and trace evidence for every failure.</p></div>
+          </div>
+
+          <div class="block" style="background:var(--pass-soft);border-color:color-mix(in srgb, var(--pass) 30%, var(--line))">
+            <span class="kv" style="color:var(--pass)">Since the report</span>
+            <p style="font-size:15px">The figures below are from the full cycle of 4 Oct 2026. The suite has kept growing: it now has <strong>205 test functions across 15 modules</strong>, adding Accounting Settings, Invoice Settings and Training Schedules, and CI runs Chromium on every push plus a nightly Chromium, Firefox and WebKit matrix.</p>
+          </div>
+
+          <div class="results" aria-label="Programme results">
+            <div><b>130</b><span>automated test cases, 12 functional areas</span></div>
+            <div><b>511</b><span>test runs in one full cycle</span></div>
+            <div><b>~3h</b><span>full regression on 2 browsers, unattended</span></div>
+            <div><b class="hl">29</b><span>confirmed defects caught in staging before release</span></div>
+          </div>
+
+          <div class="grid-2">
+            <div class="block">
+              <h4>What the suite covers</h4>
+              <p class="sub">130 tests split by module, then by Organization Settings sub-area.</p>
+              <div class="split" aria-label="Tests by module">
+                <div class="s1"><b>39</b><span>Login</span></div>
+                <div class="s2"><b>20</b><span>Profile</span></div>
+                <div class="s3"><b>71</b><span>Organization Settings</span></div>
+              </div>
+              <div class="bars" style="margin-top:6px">
+                <div class="bar-row"><span class="what">NABL Settings</span><span class="track"><span class="fill" style="width:88.2%"></span></span><span class="n">15</span></div>
+                <div class="bar-row"><span class="what">NABL Registration</span><span class="track"><span class="fill" style="width:76.5%"></span></span><span class="n">13</span></div>
+                <div class="bar-row"><span class="what">Sample Page</span><span class="track"><span class="fill" style="width:70.6%"></span></span><span class="n">12</span></div>
+                <div class="bar-row"><span class="what">Logo &amp; Company</span><span class="track"><span class="fill" style="width:82.4%"></span></span><span class="n">14</span></div>
+                <div class="bar-row"><span class="what">5 more areas<small>access, location, header…</small></span><span class="track"><span class="fill" style="width:100%"></span></span><span class="n">17</span></div>
+              </div>
+            </div>
+            <div class="block">
+              <h4>How 130 tests become 511 runs</h4>
+              <p class="sub">One cycle runs every suite on Chrome and Firefox.</p>
+              <div class="bars">
+                <div class="bar-row"><span class="what">Smoke<small>build check</small></span><span class="track"><span class="fill ink" style="width:28.7%"></span></span><span class="n">50</span></div>
+                <div class="bar-row"><span class="what">Sanity<small>quick health</small></span><span class="track"><span class="fill ink" style="width:48.3%"></span></span><span class="n">84</span></div>
+                <div class="bar-row"><span class="what">Regression<small>full validation</small></span><span class="track"><span class="fill ink" style="width:74.7%"></span></span><span class="n">130</span></div>
+                <div class="bar-row"><span class="what">Parallel<small>4 workers</small></span><span class="track"><span class="fill ink" style="width:100%"></span></span><span class="n">174</span></div>
+                <div class="bar-row"><span class="what">New batch<small>30 tests × 2</small></span><span class="track"><span class="fill ink" style="width:34.5%"></span></span><span class="n">60</span></div>
+                <div class="bar-row"><span class="what">Skipped<small>documented reason</small></span><span class="track"><span class="fill mute" style="width:7.5%"></span></span><span class="n">13</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="block">
+            <h4>Framework architecture</h4>
+            <p class="sub">Tests say <em>what</em> is checked; page classes hold <em>how</em> each screen is driven. A UI change is fixed in one class, not across many tests.</p>
+            <div class="arch" style="margin-top:8px">
+              <div class="col">
+                <span class="kv">Inputs</span>
+                <div class="box">Test-case workbook<small>.xlsx · IDs for traceability</small></div>
+                <div class="box">Data-driven inputs<small>JSON · CSV · Faker</small></div>
+                <div class="box">config.py · .env<small>secrets never in code</small></div>
+                <div class="box">pytest.ini<small>markers · retries · reports</small></div>
+              </div>
+              <div class="arrow" aria-hidden="true">→</div>
+              <div class="col">
+                <span class="kv">Layers</span>
+                <div class="layer l1">Tests<small>130 tests · 12 functional areas</small></div>
+                <div class="layer l2">Page objects<small>BasePage · one class per screen</small></div>
+                <div class="layer l3">Fixtures &amp; hooks<small>browser, auth session, evidence capture</small></div>
+                <div class="layer l4">Playwright engine (Python)<small>Chromium · Firefox · WebKit</small></div>
+              </div>
+              <div class="arrow" aria-hidden="true">→</div>
+              <div class="col ev">
+                <span class="kv">Evidence</span>
+                <div class="box">Allure report<small>epic → feature → story</small></div>
+                <div class="box">pytest-html report<small>one shareable file</small></div>
+                <div class="box">Screenshots &amp; video<small>captured on failure</small></div>
+                <div class="box">Playwright traces<small>step-by-step replay</small></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pipeline" aria-label="CI pipeline">
+            <div class="head"><span>ci-pipeline · Jenkins &amp; GitHub Actions</span><span>push → chromium · nightly 02:00 → chromium + firefox + webkit</span></div>
+            <div class="flow">
+              <div class="st">Trigger<small>push / PR · nightly · on demand by marker</small></div>
+              <div class="st">Checkout<small>secrets injected at runtime</small></div>
+              <div class="st hot">Docker image<small>pinned Playwright version</small></div>
+              <div class="st">Run suite<small>suite × browser</small></div>
+              <div class="st">Publish<small>Allure + HTML · build status</small></div>
+            </div>
+          </div>
+
+          <div class="block">
+            <h4>Engineering controls I built in</h4>
+            <div class="controls" style="margin-top:4px">
+              <div><b>Security</b><span>Credentials only through environment or CI secrets, masked in logs.</span></div>
+              <div><b>Traceability</b><span>Workbook ID → test script → last result, in one mapping sheet.</span></div>
+              <div><b>Spec-first assertions</b><span>Failures are logged as product defects, never hidden by loosening a check.</span></div>
+              <div><b>Flake control</b><span>One automatic retry before a failure is reported.</span></div>
+              <div><b>Evidence on failure</b><span>Screenshot, video and trace attached to every failed result.</span></div>
+              <div><b>Reproducibility</b><span>Pinned dependencies and the official Playwright Docker image.</span></div>
+            </div>
+          </div>
+
+          <div class="block">
+            <h4>Roadmap I proposed</h4>
+            <div class="roadmap" style="margin-top:8px">
+              <div class="done"><i>✓</i><b>Phase 1</b><span>Framework, CI/CD, 130 tests on 2 browsers</span></div>
+              <div class="now"><i>2</i><b>Phase 2 · now</b><span>Fix the 29 defects, stabilise shared-data tests</span></div>
+              <div><i>3</i><b>Phase 3</b><span>Material &amp; Instrument Management</span></div>
+              <div><i>4</i><b>Phase 4</b><span>Training, Widgets, Data Analysis</span></div>
+              <div><i>5</i><b>Phase 5</b><span>API tests and a trend dashboard</span></div>
+            </div>
+          </div>
+
+          <p class="ip-note"><span aria-hidden="true">🔒</span><span><b>Built for Deepak Cybit's product; code available on request.</b> Architecture and figures are summarised from the programme report I prepared for leadership and from the framework's codebase. No client data, URLs or credentials are shown.</span></p>
+        </div>
+      </article>
+
+      <!-- CASE 02 -->
+      <article class="case" id="case-02">
+        <div class="case-tab"><b>CASE 02</b> OpenCart · Open-source framework</div>
+        <div class="case-body">
+          <div class="case-top">
+            <div>
+              <span class="status public">Public on GitHub</span>
+              <h3 style="margin-top:12px">Playwright + Python framework for an e-commerce store</h3>
+              <p class="lede">My own framework built against the OpenCart demo store (TutorialsNinja). It covers the core shopper journey, from registration to a verified cart total, and is where I worked out the patterns I later scaled up for LIMS.</p>
+              <div class="actions" style="margin-top:16px"><a class="btn primary" href="https://github.com/Saurabh2864/opencartplaywrightpythonframework" target="_blank" rel="noopener">View code on GitHub →</a></div>
+            </div>
+            <dl class="spec">
+              <dt>Role</dt><dd>Sole author</dd>
+              <dt>Target</dt><dd>OpenCart demo store</dd>
+              <dt>Design</dt><dd>Page Object Model · 9 page classes</dd>
+              <dt>Libraries</dt><dd>pytest · Allure · pytest-html · Faker · openpyxl</dd>
+              <dt>Tools</dt><dd><span class="chips"><span class="chip t">PyCharm</span><span class="chip t">Playwright</span><span class="chip t">Jenkins</span><span class="chip t">Git</span><span class="chip t">GitHub</span></span></dd>
+            </dl>
+          </div>
+
+          <div class="grid-3">
+            <div class="block">
+              <h4>Project structure</h4>
+<pre class="tree"><b>opencartplaywrightpythonframework/</b>
+├── <b>pages/</b>       9 page objects
+├── <b>tests/</b>       7 test modules
+├── <b>testdata/</b>    CSV · JSON · Excel
+├── <b>utilities/</b>   data readers, Faker
+├── conftest.py  fixtures &amp; hooks
+├── config.py
+└── pytest.ini   options &amp; markers</pre>
+            </div>
+            <div class="block">
+              <h4>What it tests</h4>
+              <div class="tests">
+                <div><code>test_user_registration</code><span>Faker data</span></div>
+                <div><code>test_login</code><span>valid · invalid</span></div>
+                <div><code>test_login_data_driven</code><span>CSV / JSON / Excel</span></div>
+                <div><code>test_product_search</code><span>search results</span></div>
+                <div><code>test_add_product_to_cart</code><span>cart message</span></div>
+                <div><code>test_user_logout</code><span>session end</span></div>
+                <div><code>test_end_to_end</code><span>full journey</span></div>
+              </div>
+            </div>
+            <div class="block">
+              <h4>Framework features</h4>
+              <ul>
+                <li>Browser, headed mode and base URL switchable from the command line</li>
+                <li>Markers for sanity, regression, data-driven and end-to-end runs</li>
+                <li>Screenshot, video and trace kept only when a test fails, attached to Allure</li>
+                <li>Self-contained HTML report alongside Allure results</li>
+                <li>Ready for parallel runs (pytest-xdist) and reruns of flaky tests</li>
+              </ul>
+            </div>
+          </div>
+
+<pre class="code" aria-label="Excerpt from test_end_to_end.py"><span class="c"># tests/test_end_to_end.py  (excerpt)</span>
+<span class="k">@pytest.mark.end_to_end</span>
+<span class="k">def</span> <span class="f">test_end_to_end_flow</span>(page):
+    email, password = perform_registration(page)   <span class="c"># 1. register with Faker data</span>
+    perform_logout(page)                           <span class="c"># 2. logout</span>
+    perform_login(page, email, password)           <span class="c"># 3. login as the new user</span>
+    add_product_to_cart(page)                      <span class="c"># 4. search "MacBook", add to cart</span>
+    verify_shopping_cart(page)                     <span class="c"># 5. assert the cart total</span></pre>
+        </div>
+      </article>
+
+      <!-- CASES 03-06 -->
+      <div class="grid-2" style="margin-top:26px">
+        <article class="prod paper" id="case-03">
+          <div class="head"><span class="cid">CASE 03 · Idea Usher</span><span class="status done">Shipped</span></div>
+          <h3>Symbol Drive app &amp; admin panel</h3>
+          <p class="lede">A car-sharing app: find nearby cars, scan to start a ride, and let a radar module find a car within a radius the user sets.</p>
+          <dl class="meta">
+            <dt>Platform</dt><dd>Android · iOS · web admin panel</dd>
+            <dt>Period</dt><dd>Feb 2023 – Mar 2024</dd>
+            <dt>Role</dt><dd>Quality Analyst</dd>
+            <dt>Tools</dt><dd><span class="chips"><span class="chip t">Jira</span><span class="chip t">Android Studio</span><span class="chip t">BrowserStack</span><span class="chip t">Apache JMeter</span><span class="chip t">PageSpeed Insights</span><span class="chip t">Dead Link Checker</span></span></dd>
+          </dl>
+          <div><span class="kv">Key areas tested</span>
+            <ul style="margin-top:6px">
+              <li>Booking flow and scan-to-start ride</li>
+              <li>Radar booking assistant and radius slider</li>
+              <li>Map zones: drive &amp; park, park only, no driving</li>
+              <li>Car list for the visible map area, admin panel</li>
+            </ul>
+          </div>
+          <div class="chips"><span class="chip">Functional</span><span class="chip">Regression</span><span class="chip">API</span><span class="chip">Performance</span><span class="chip">UAT</span></div>
+        </article>
+
+        <article class="prod paper" id="case-04">
+          <div class="head"><span class="cid">CASE 04 · Idea Usher</span><span class="status done">Shipped</span></div>
+          <h3>All Ag All Day</h3>
+          <p class="lede">An agricultural news platform covering farming, ranching and agribusiness, with a mobile app and a web admin panel for publishing.</p>
+          <dl class="meta">
+            <dt>Platform</dt><dd>Mobile app · web admin panel</dd>
+            <dt>Period</dt><dd>Dec 2022 – Mar 2024</dd>
+            <dt>Role</dt><dd>Quality Analyst</dd>
+            <dt>Tools</dt><dd><span class="chips"><span class="chip t">Jira</span><span class="chip t">BrowserStack</span><span class="chip t">Postman</span><span class="chip t">Viewport Resizer</span><span class="chip t">Figma</span></span></dd>
+          </dl>
+          <div><span class="kv">Key areas tested</span>
+            <ul style="margin-top:6px">
+              <li>Admin panel: creating and managing news content</li>
+              <li>App: reading and browsing news by topic</li>
+              <li>Content showing correctly from admin to app</li>
+              <li>Device coverage on real phones via BrowserStack</li>
+            </ul>
+          </div>
+          <div class="chips"><span class="chip">Functional</span><span class="chip">Regression</span><span class="chip">UI/UX</span><span class="chip">API</span><span class="chip">Responsive</span></div>
+        </article>
+
+        <article class="prod paper" id="case-05">
+          <div class="head"><span class="cid">CASE 05 · Idea Usher</span><span class="status done">Shipped</span></div>
+          <h3>Whiskey Simulation Game</h3>
+          <p class="lede">A story-mode simulation where the player runs the whole whiskey-making process, guided by an in-app advisor, with no levels.</p>
+          <dl class="meta">
+            <dt>Platform</dt><dd>Android · iOS</dd>
+            <dt>Period</dt><dd>Oct 2023 – Mar 2024</dd>
+            <dt>Role</dt><dd>Quality Analyst</dd>
+            <dt>Tools</dt><dd><span class="chips"><span class="chip t">Charles Proxy</span><span class="chip t">Android Studio</span><span class="chip t">Figma</span><span class="chip t">Jira</span></span></dd>
+          </dl>
+          <div><span class="kv">Key areas tested</span>
+            <ul style="margin-top:6px">
+              <li>Story flow and in-app advisor guidance</li>
+              <li>Each production step and game state</li>
+              <li>Performance and compatibility across devices</li>
+              <li>Gameplay and UX issues with devs and designers</li>
+            </ul>
+          </div>
+          <div class="chips"><span class="chip">Functional</span><span class="chip">Regression</span><span class="chip">Performance</span><span class="chip">Compatibility</span><span class="chip">Combinatorial</span><span class="chip">Ad-hoc / Exploratory</span></div>
+        </article>
+
+        <article class="prod paper" id="case-06">
+          <div class="head"><span class="cid">CASE 06 · Deepak Cybit</span><span class="status active">Active</span></div>
+          <h3>Meeting Management System for a government PSU</h3>
+          <p class="lede">An enterprise platform for planning meetings and following them up: agendas, minutes of meeting, action items and room booking.</p>
+          <dl class="meta">
+            <dt>Platform</dt><dd>Web</dd>
+            <dt>Period</dt><dd>Apr 2025 – Present</dd>
+            <dt>Role</dt><dd>Quality Analyst</dd>
+            <dt>Tools</dt><dd><span class="chips"><span class="chip t">Figma</span><span class="chip t">SonarQube</span><span class="chip t">Jira</span><span class="chip t">Viewport Resizer</span><span class="chip t">Redmine</span><span class="chip t">Playwright</span><span class="chip t">JMeter</span></span></dd>
+          </dl>
+          <div><span class="kv">Key areas tested</span>
+            <ul style="margin-top:6px">
+              <li>Meeting Creation and Agenda</li>
+              <li>Minutes of Meeting (MoM) and Action Items</li>
+              <li>Room Booking</li>
+              <li>Admin module and access</li>
+            </ul>
+          </div>
+          <p style="font-size:14.5px">Functional, UI/UX, smoke, sanity and regression testing across all modules. API tests in Postman, load tests in JMeter.</p>
+          <div class="chips"><span class="chip">Functional</span><span class="chip">UI/UX</span><span class="chip">Smoke &amp; Sanity</span><span class="chip">Regression</span><span class="chip">API</span><span class="chip">Load</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DELIVERY ================= -->
+  <section id="delivery">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">Beyond testing</span>
+        <h2>I also own the conversation with the client.</h2>
+        <p>At Deepak Cybit I work on both sides of a release: understanding what the client needs and checking that the product delivers it.</p>
+      </div>
+      <div class="deliv">
+        <div class="paper" style="padding:26px;display:grid;gap:16px">
+          <span class="status active" style="justify-self:start">Ongoing · Project coordination</span>
+          <h3 style="font-size:24px">Scope 2 delivery for an HSE compliance portal</h3>
+          <p class="muted">An industrial client uses a Health, Safety &amp; Environment portal to report and track workplace incidents. After Scope 1 was delivered, I became the client's point of contact for Scope 2.</p>
+          <div class="steps">
+            <div class="step"><span class="kv">Problem</span><p>Incident emails had to reach the right people based on their role, and the client shared those rules as an Excel sheet.</p></div>
+            <div class="step"><span class="kv">What I did</span><p>Clarified the rules with the client, mapped each role to who should be alerted, and set up the portal's Notification Matrix for new incidents.</p></div>
+            <div class="step"><span class="kv">My role</span><p>Gather requirements, turn them into configuration, and coordinate the work through to release.</p></div>
+          </div>
+          <div class="chips"><span class="chip">Requirement analysis</span><span class="chip">Client communication</span><span class="chip">Configuration</span><span class="chip">Release coordination</span></div>
+        </div>
+        <div style="display:grid;gap:18px;align-content:start">
+          <div class="paper" style="padding:22px;display:grid;gap:10px">
+            <span class="kv">Reporting</span>
+            <h3 style="font-size:19px">Executive report for leadership</h3>
+            <p class="muted" style="font-size:15px">Wrote the LIMS automation programme report: status, results, defect themes, risks and the decisions needed from management, in plain business language.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= APPROACH ================= -->
+  <section id="approach">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">How I work</span>
+        <h2>From requirement to release decision</h2>
+        <p>The same five steps run through every case above, and each one leaves something a reviewer can check.</p>
+      </div>
+      <div class="approach">
+        <div><span class="no">01</span><h4>Understand</h4><p>Read the requirement and confirm the unclear parts with the client or product owner before testing starts.</p><span class="ev">→ clarified spec</span></div>
+        <div><span class="no">02</span><h4>Design</h4><p>Write module-wise test cases with IDs, covering positive, negative and boundary inputs.</p><span class="ev">→ test-case workbook</span></div>
+        <div><span class="no">03</span><h4>Automate</h4><p>Automate stable regression with POM and data-driven tests; keep exploratory testing manual.</p><span class="ev">→ framework + suites</span></div>
+        <div><span class="no">04</span><h4>Run &amp; prove</h4><p>Run in CI on every browser, with screenshot, video and trace for each failure.</p><span class="ev">→ Allure evidence</span></div>
+        <div><span class="no">05</span><h4>Report</h4><p>Group defects by theme and priority, and state the decisions needed for release.</p><span class="ev">→ report for leadership</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">Experience</span><h2>Where I've worked</h2></div>
+      <div class="timeline">
+        <div class="job">
+          <div class="when">Apr 2025 – Present</div>
+          <div>
+            <h3>Quality Analyst <span class="now-pill">Current</span></h3>
+            <p class="org">Deepak Cybit Pvt. Ltd. · Vadodara · On-site</p>
+            <ul>
+              <li>Designed and built the LIMS automation framework: 130 tests, 2 browsers, Docker, Jenkins and GitHub Actions (Case 01)</li>
+              <li>Client point of contact for Scope 2 of an HSE compliance portal</li>
+              <li>QA for a Meeting Management System for a government PSU (Case 06)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">Oct 2024 – Mar 2025</div>
+          <div>
+            <h3>QA Tester, Gaming</h3>
+            <p class="org">Highbrow Technology Inc · Remote</p>
+            <ul>
+              <li>Functional, regression, performance and compatibility testing of mobile games on Android and iOS</li>
+              <li>Logged and tracked defects to closure with developers and designers</li>
+            </ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">Sep 2022 – Mar 2024</div>
+          <div>
+            <h3>Quality Analyst <span class="muted" style="font-weight:500;font-size:.85em">(intern, then full-time)</span></h3>
+            <p class="org">Idea Usher · Mohali · Remote</p>
+            <ul>
+              <li>Symbol Drive, All Ag All Day and the Whiskey Simulation Game (Cases 03, 04, 05)</li>
+              <li>Angolazone online marketplace: functional, regression and API testing</li>
+              <li>Device testing on BrowserStack, defects in Redmine, load tests in JMeter</li>
+            </ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">Jun 2022 – Aug 2022</div>
+          <div>
+            <h3>Software Testing Intern</h3>
+            <p class="org">Dimakh Consultants Pvt. Ltd. · Pune</p>
+            <ul><li>Website UI, content, functional, mobile-view and dead-link testing</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SKILLS ================= -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">Skills</span><h2>Toolkit, with where I've used it</h2></div>
+      <div class="domains paper">
+        <span class="kv">Domain knowledge</span>
+        <div class="dom-list">
+          <span class="dom"><i>LAB</i>Laboratory (LIMS, NABL &amp; ISO)</span>
+          <span class="dom"><i>HSE</i>Health, Safety &amp; Environment</span>
+          <span class="dom"><i>GAM</i>Gaming</span>
+          <span class="dom"><i>ECM</i>E-commerce</span>
+          <span class="dom"><i>AGR</i>Agriculture</span>
+          <span class="dom"><i>IOT</i>IoT</span>
+          <span class="dom"><i>BNK</i>Banking</span>
+          <span class="dom"><i>EDU</i>Education</span>
+        </div>
+      </div>
+      <div class="skills">
+        <div class="paper">
+          <h3>Automation</h3>
+          <div class="chips"><span class="chip">Playwright</span><span class="chip">Python</span><span class="chip">pytest</span><span class="chip">POM</span><span class="chip">Data-driven</span><span class="chip">Faker</span><span class="chip">Allure</span></div>
+          <p>Cases 01, 02</p>
+        </div>
+        <div class="paper">
+          <h3>CI/CD &amp; tooling</h3>
+          <div class="chips"><span class="chip">Docker</span><span class="chip">Jenkins</span><span class="chip">GitHub Actions</span><span class="chip">Git</span><span class="chip">pytest-xdist</span></div>
+          <p>Case 01</p>
+        </div>
+        <div class="paper">
+          <h3>Testing</h3>
+          <div class="chips"><span class="chip">Functional</span><span class="chip">Regression</span><span class="chip">UAT</span><span class="chip">Mobile</span><span class="chip">Game</span><span class="chip">AI apps</span><span class="chip">Postman</span><span class="chip">JMeter</span><span class="chip">SQL</span></div>
+          <p>Cases 03 – 06</p>
+        </div>
+        <div class="paper">
+          <h3>Delivery</h3>
+          <div class="chips"><span class="chip">Requirements</span><span class="chip">Client communication</span><span class="chip">Coordination</span><span class="chip">Reporting</span><span class="chip">Jira</span><span class="chip">Redmine</span><span class="chip">Agile</span></div>
+          <p>HSE portal, LIMS reporting</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CREDENTIALS ================= -->
+  <section id="credentials" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">Credentials</span><h2>Certifications &amp; education</h2></div>
+      <div class="creds paper">
+        <div class="cred"><span>CAPM, Project Management Institute</span><span class="d wip">Preparing · 2026</span></div>
+        <div class="cred"><span>Business Analysis Basics · Simplilearn</span><span class="d">Apr 2024</span></div>
+        <div class="cred"><span>Cloud Computing with AWS · Great Learning</span><span class="d">Jan 2024</span></div>
+        <div class="cred"><span>B.E. Electrical Engineering · JSPM's BSIOTR, Pune</span><span class="d">2021</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <span class="label">Contact</span>
+          <h2 style="margin-top:12px">Need releases you can trust?</h2>
+          <p>Open to QA automation and project management roles. Call, email or LinkedIn, whichever suits you.</p>
+          <div class="reach">
+            <div class="email">
+              <span class="rk">Phone</span>
+              <code id="phone-text">+91 83808 70035</code>
+              <button class="btn primary copy" type="button" data-copy="+918380870035" data-target="phone-text">Copy number</button>
+              <a class="btn ghost" href="tel:+918380870035">Call</a>
+            </div>
+            <div class="email">
+              <span class="rk">Email</span>
+              <code id="email-text">s.mirajkar1999@gmail.com</code>
+              <button class="btn primary copy" type="button" data-copy="s.mirajkar1999@gmail.com" data-target="email-text">Copy email</button>
+            </div>
+            <span class="copied" id="copy-status" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="actions" style="margin-top:0">
+          <a class="btn ghost" href="https://www.linkedin.com/in/saurabh-mirajkar-52782a222" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn ghost" href="https://github.com/Saurabh2864" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <footer><span>© 2026 Saurabh Mirajkar</span><span>Vadodara, Gujarat, India</span></footer>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var status = document.getElementById('copy-status');
+  function selectText(el) {
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+    } catch (e) {}
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('button.copy'), function (btn) {
+    btn.addEventListener('click', function () {
+      var value = btn.getAttribute('data-copy');
+      var el = document.getElementById(btn.getAttribute('data-target'));
+      var label = btn.getAttribute('data-target') === 'phone-text' ? 'Number copied' : 'Email copied';
+      try {
+        navigator.clipboard.writeText(value).then(function () {
+          status.textContent = label;
+        }, function () {
+          selectText(el); status.textContent = 'Selected, press Ctrl+C';
+        });
+      } catch (e) {
+        selectText(el); status.textContent = 'Selected, press Ctrl+C';
+      }
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
