@@ -372,6 +372,25 @@ footer { padding-block: 26px 40px; font-size: 13px; color: var(--muted); display
 }
 </style>
 <style>:root{color-scheme:light}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark}} img{max-width:100%}</style>
+<style>
+/* Intro video */
+.intro-video { display: grid; grid-template-columns: 1fr minmax(0, 460px); gap: 48px; align-items: center; margin-top: 28px; padding: 32px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); scroll-margin-top: 90px; }
+.intro-video > * { min-width: 0; }
+.iv-text h2 { font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 40px); font-weight: 800; letter-spacing: -0.015em; margin-top: 10px; }
+.iv-text p { color: var(--muted); font-size: 17px; margin-top: 12px; max-width: 52ch; }
+.iv-points { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 10px; }
+.iv-points li { position: relative; padding-left: 22px; font-size: 15px; color: var(--muted); }
+.iv-points li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+.iv-points b { color: var(--ink); font-weight: 600; }
+.iv-text .actions { margin-top: 24px; }
+.iv-player { margin: 0; }
+.iv-player video { display: block; width: 100%; aspect-ratio: 1 / 1; height: auto; background: #0a1628; }
+@media (max-width: 1000px) {
+  .intro-video { grid-template-columns: 1fr; gap: 28px; padding: 24px; }
+  .iv-player { max-width: 520px; width: 100%; justify-self: center; }
+}
+@media (max-width: 460px) { .intro-video { padding: 16px; } }
+</style>
 </head>
 <body>
 
@@ -380,6 +399,7 @@ footer { padding-block: 26px 40px; font-size: 13px; color: var(--muted); display
   <div class="wrap">
     <a class="brand" href="#top"><span class="mark" aria-hidden="true">SM</span>Saurabh Mirajkar</a>
     <nav class="nav" aria-label="Sections">
+      <a href="#intro">Intro</a>
       <a href="#cases">Case files</a>
       <a href="#delivery">Delivery</a>
       <a href="#approach">Approach</a>
@@ -427,6 +447,29 @@ footer { padding-block: 26px 40px; font-size: 13px; color: var(--muted); display
       <div><span class="k">Core strength</span><span class="v">Playwright + Python automation with CI/CD</span></div>
       <div><span class="k">Also own</span><span class="v">Client requirements &amp; project coordination</span></div>
       <div><span class="k">Looking for</span><span class="v">QA Automation and project management roles</span></div>
+    </div>
+
+    <!-- ================= INTRO VIDEO ================= -->
+    <div class="intro-video" id="intro">
+      <div class="iv-text">
+        <span class="label">Intro · 75 seconds</span>
+        <h2>Meet me in 75 seconds.</h2>
+        <p>Who I am, how I test, the automation I build with Playwright and Python, and how I work directly with clients — in my own voice.</p>
+        <ul class="iv-points">
+          <li><b>3+ yrs</b> web, mobile &amp; enterprise QA</li>
+          <li><b>Playwright + Python</b> with Jenkins and GitHub Actions</li>
+          <li><b>Client delivery</b> on a compliance portal</li>
+          <li><b>AI-assisted automation</b> · CAPM in progress</li>
+        </ul>
+        <div class="actions"><a class="btn" href="#cases">Skip to the case files</a></div>
+      </div>
+      <figure class="console iv-player">
+        <div class="console-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>intro.mp4 · 1:15 · captions on</span></div>
+        <video controls playsinline preload="metadata" poster="intro-poster.jpg" aria-label="Saurabh Mirajkar introduction video, 75 seconds, with captions">
+          <source src="intro.mp4" type="video/mp4">
+          Your browser can't play this video. <a href="intro.mp4">Download the intro video</a>.
+        </video>
+      </figure>
     </div>
   </div>
 
